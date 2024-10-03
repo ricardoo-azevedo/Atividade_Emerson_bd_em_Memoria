@@ -14,19 +14,16 @@ class _HomePageState extends State<HomePage> {
   final List<String> _contatos = [];
   final _formKey = GlobalKey<FormState>();
 
-  Color corFundo = Colors.white;
+  Color corFundo = const Color(0xffe9d79d);
   Color corTexto = Colors.black;
-  Color? corBotao = Color.fromARGB(255, 58, 4, 67);
-
-  
+  Color? corBotao = const Color(0xff47323b);
+  Color formField = const Color(0xff47323b);
 
   @override
   void initState() {
     super.initState();
     _loadData();
   }
-
-
 
   Future<void> _saveData() async {
     if (_formKey.currentState!.validate()) {
@@ -54,26 +51,24 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _contatos.removeAt(index);
     });
-
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('contatos', _contatos);
   }
-    
-  void mudarCor(){
+
+  void mudarCor() {
     setState(() {
-      if(corFundo == Colors.white){
-      corFundo = Color.fromARGB(255, 58, 4, 67);
-      corTexto = Colors.white;
-      corBotao = Colors.deepPurple[200];
-    }else if(corFundo == Color.fromARGB(255, 58, 4, 67)){
-      corFundo = Colors.white;
-      corTexto = Color.fromARGB(255, 58, 4, 67);
-      corBotao = Color.fromARGB(255, 58, 4, 67);
-    }
+      if (corFundo == const Color(0xffe9d79d)) {
+        corFundo = const Color(0xff47323b);
+        corTexto = const Color(0xffe9d79d);
+        corBotao = const Color(0xffb0764f);
+        formField = corBotao!;
+      } else if (corFundo == const Color(0xff47323b)) {
+        corFundo = const Color(0xffe9d79d);
+        corTexto = Colors.black;
+        corBotao = const Color(0xff47323b);
+        formField = corBotao!;
+      }
     });
-    
-    
-    
   }
 
   @override
@@ -82,19 +77,21 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: corFundo,
       appBar: AppBar(
         actions: [
-          FloatingActionButton(onPressed: mudarCor,
-          backgroundColor: corBotao,
+          FloatingActionButton(
+            onPressed: mudarCor,
+            backgroundColor: corBotao,
+            foregroundColor: const Color(0xffbaac81),
+            child: const Icon(Icons.nightlight_rounded),
           ),
         ],
-        backgroundColor: Colors.deepPurple[300],
+        backgroundColor: const Color(0xff735a55),
         title: const Center(
           child: Text(
             "         Lista de Contatos",
             style: TextStyle(
-              fontWeight: FontWeight.w500, 
-              color: Colors.white,
-              ),
-            
+              fontWeight: FontWeight.w500,
+              color: Color(0xffe9d79d),
+            ),
           ),
         ),
       ),
@@ -105,24 +102,26 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(15),
               child: TextFormField(
-                style:  TextStyle(
+                style: TextStyle(
                   color: corTexto,
                 ),
-                decoration: const InputDecoration(
-                  
-                    labelText: "Inserir nome",
-                    border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.white
-                    )
+                decoration: InputDecoration(
+                  labelText: "Inserir nome",
+                  labelStyle: TextStyle(color: formField),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: formField),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: formField),
                   ),
-                
-
-                
-                
+                  errorBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  focusedErrorBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
                 controller: _controller1,
-                
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Digite algum nome!";
@@ -141,13 +140,24 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextFormField(
                 controller: _controller2,
-                style:  TextStyle(
+                style: TextStyle(
                   color: corTexto,
                 ),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Inserir um número",
-                  
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: formField),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: formField),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: formField),
+                  ),
+                  errorBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  focusedErrorBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -156,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                   if (value.length < 4) {
                     return "Adicione um número maior!";
                   }
-                  if (value.length > 18) {
+                  if (value.length > 25) {
                     return "Adicione um número menor!";
                   }
                   return null;
@@ -170,13 +180,13 @@ class _HomePageState extends State<HomePage> {
               height: 40,
               child: FloatingActionButton(
                 onPressed: _saveData,
-                backgroundColor: Colors.deepPurple[300],
+                backgroundColor: const Color(0xff735a55),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Text(
                   "Salvar",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Color(0xffe9d79d)),
                 ),
               ),
             ),
@@ -189,13 +199,13 @@ class _HomePageState extends State<HomePage> {
                     margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.deepPurple[100],
+                      color: const Color(0xffbaac81),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
                       title: Text(_contatos[index]),
                       trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.deepPurple),
+                        icon: const Icon(Icons.delete, color: Color(0xff5c4657)),
                         onPressed: () {
                           _removeData(index);
                         },
